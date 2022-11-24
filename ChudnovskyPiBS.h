@@ -14,10 +14,10 @@ struct bsReturn
 class ChudnovskyPiBS //Calculates Pi using Chudnovsky algorithm with Binary Splitting
 {
 private:
-	long double C = 640320;
-	long double C3_OVER_24 = powl(C,3)/24;
+	const long double C = 640320;
+	const long double C3_OVER_24 = powl(C,3)/24;
 	mpz_class intBigC3_OVER_24 = 0;
-	long double DIGITS_PER_TERM = log10l(C3_OVER_24 / 6 / 2 / 6);
+	const long double DIGITS_PER_TERM = log10l(C3_OVER_24 / 6 / 2 / 6);
 
 	unsigned long N;
 	unsigned long digits;
@@ -41,6 +41,9 @@ private:
 	/// <param name="b"></param>
 	/// <returns></returns>
 	bsReturn bs(mpz_class a, mpz_class b);
+	bsReturn bs_multithreaded(mpz_class a, mpz_class b, int threadCount, int depth);
+	int getTotalNumThreadsFromUsefulNumThreads(int usefulThreadCountWanted);
+
 public:
 	/// <summary>
 	/// Constructor for ChudnovskyPiBS Class.

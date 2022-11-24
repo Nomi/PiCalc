@@ -94,7 +94,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>C:\Users\Noman\source\repos\PiCalculatorC++\GMP\Linker Files\libgmp.dll.a;C:\Users\Noman\source\repos\PiCalculatorC++\GMP\Linker Files\libgmpxx.dll.a;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>C:\Users\Noman\source\repos\PiCalc\GMP\Linker Files\libgmp.dll.a;C:\Users\Noman\source\repos\PiCalc\GMP\Linker Files\libgmpxx.dll.a;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

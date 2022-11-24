@@ -21,8 +21,11 @@ int main()
 
     mpz_class calculatedPi = piCalc->calculatePi();
     auto stop = std::chrono::high_resolution_clock::now();
+    
     auto duration_MS = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
     auto duration_S = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
+    std::chrono::duration<double> elapsed_time = stop - start;
+    float execution_time = (float)elapsed_time.count();
     size_t duration;
     std::string suffix = "miliseconds";
     if (duration_S.count() != 0)
@@ -32,8 +35,8 @@ int main()
     }
     else
         duration = duration_MS.count();
-    std::cout << "Computed " << digits << " digits (excluding the first digit ('3')) in " << duration << suffix << "." << std::endl << std::endl;
-
+    //std::cout << "Computed " << digits <<" (10^"<<log10l(digits) << ") digits (excluding the first digit ('3')) in " << duration << suffix << "." << std::endl << std::endl;
+        std::cout << "Computed " << digits <<" (10^"<<log10l(digits) << ") digits (excluding the first digit ('3')) in " << execution_time << "seconds" << "." << std::endl << std::endl;
 
     ///Running simple tests
     std::string correctLastDigits = "61168313937514970581120187751592";
@@ -53,7 +56,7 @@ int main()
     std::ofstream out(OUTPUT_TXT_FILEPATH);
     out << calculatedPiStr;
     out.close();
-    std::cout << "Wrote computed values to :" << OUTPUT_TXT_FILEPATH << std::endl << std::endl;
+    std::cout << "Wrote computed values to :" << OUTPUT_TXT_FILEPATH << "!" << std::endl << std::endl;
 
 
     ///Finished.
