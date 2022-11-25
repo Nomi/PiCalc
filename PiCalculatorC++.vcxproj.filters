@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PiCalculatorC++.cpp">
+    <ClCompile Include="PiCalc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ChudnovskyPiBS.cpp">
