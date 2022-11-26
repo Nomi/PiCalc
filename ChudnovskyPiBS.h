@@ -44,6 +44,8 @@ private:
 	/// <param name="b"></param>
 	/// <returns></returns>
 	bsReturn bs(mpz_class a, mpz_class b);
+	void recursivelyComputePabQabTab_SingleThreaded(mpz_class& a, mpz_class& b, mpz_class& m, mpz_class& Pab, mpz_class& Qab, mpz_class& Tab);
+	void directlyCompute__P_Q_T__from_A_to_AplusOne(mpz_class& a, mpz_class& Pab, mpz_class& Qab, mpz_class& Tab);
 	bsReturn bs_multithreaded(mpz_class a, mpz_class b, int threadCount);
 	bsReturn bs_multithreaded_barrier(mpz_class a, mpz_class b, int threadCount, int depth); //uses a barrier to wait for all main worker threads to spawn.
 

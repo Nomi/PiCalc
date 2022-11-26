@@ -6,9 +6,9 @@
 
 #include <Windows.h> //this should be the last import somehow?
 
-//Global variables:
+//Global variables for configuration:
 const int NUM_THREADS_IN_CPU = std::thread::hardware_concurrency();
-const int NUM_MAIN_WORKER_THREADS = NUM_THREADS_IN_CPU; // 2 * NUM_THREADS_IN_CPU;
+const int NUM_MAIN_WORKER_THREADS = NUM_THREADS_IN_CPU;
 const int TOTAL_THREAD_COUNT = ChudnovskyPiBS::getTotalNumThreadsFromUsefulNumThreads(NUM_MAIN_WORKER_THREADS);
 std::barrier ALL_THREADS_SPAWNED(NUM_MAIN_WORKER_THREADS);
 
@@ -46,39 +46,11 @@ bsReturn ChudnovskyPiBS::bs(mpz_class a, mpz_class b) //clearly thread safe beca
 	mpz_class m;
 	if (b - a == 1)
 	{
-		//Directly compute P(a,a+1), Q(a,a+1) and T(a,a+1)
-		if (a == 0)
-			Pab = Qab = 1;
-		else
-		{
-			Pab = (6 * a - 5) * (2 * a - 1) * (6 * a - 1);
-			Qab = a * a * a * intBigC3_OVER_24;
-		}
-
-		Tab = Pab * (13591409 + 545140134 * a); // a(a) * p(a)
-		//Pab.get_str();
-		//Tab.get_str();
-		//a.get_str();
-		//Qab.get_str();
-		mpz_class toCheck;
-		mpz_and(toCheck.get_mpz_t(), a.get_mpz_t(), one);
-		if (toCheck == 1) //note to self: works as expected
-			Tab = -Tab;
+		directlyCompute__P_Q_T__from_A_to_AplusOne(a, Pab, Qab, Tab);
 	}
 	else
 	{
-		// Recursively compute P(a,b), Q(a,b) and T(a,b)
-		// m is the midpoint of and b
-		mpz_class aplusb = a + b;
-		mpz_div_ui(m.get_mpz_t(), aplusb.get_mpz_t(), 2);//equivalent pseudocode: m=floor((a+b)/2)
-		// Recursively calculate P(a, m), Q(a, m) and T(a, m)
-		bsReturn am = bs(a, m);
-		// Recursively calculate P(m, b), Q(m, b) and T(m, b)
-		bsReturn mb = bs(m, b);
-		// Now combine
-		Pab = am.P * mb.P;
-		Qab = am.Q * mb.Q;
-		Tab = (mb.Q * am.T) + (am.P * mb.T);
+		recursivelyComputePabQabTab_SingleThreaded(a, b, m, Pab, Qab, Tab);
 	}
 	result.P = Pab;
 	result.Q = Qab;
@@ -87,6 +59,42 @@ bsReturn ChudnovskyPiBS::bs(mpz_class a, mpz_class b) //clearly thread safe beca
 	//std::string qabStr = result.Q.get_str();
 	//std::string tabStr = result.T.get_str();
 	return result;
+}
+void ChudnovskyPiBS::directlyCompute__P_Q_T__from_A_to_AplusOne(mpz_class& a, mpz_class& Pab, mpz_class& Qab, mpz_class& Tab)
+{
+	//Directly compute P(a,a+1), Q(a,a+1) and T(a,a+1)
+	if (a == 0)
+		Pab = Qab = 1;
+	else
+	{
+		Pab = (6 * a - 5) * (2 * a - 1) * (6 * a - 1);
+		Qab = a * a * a * intBigC3_OVER_24;
+	}
+
+	Tab = Pab * (13591409 + 545140134 * a); // a(a) * p(a)
+	//Pab.get_str();
+	//Tab.get_str();
+	//a.get_str();
+	//Qab.get_str();
+	mpz_class toCheck;
+	mpz_and(toCheck.get_mpz_t(), a.get_mpz_t(), one);
+	if (toCheck == 1) //note to self: works as expected
+		Tab = -Tab;
+}
+void ChudnovskyPiBS::recursivelyComputePabQabTab_SingleThreaded(mpz_class& a, mpz_class& b, mpz_class& m, mpz_class& Pab, mpz_class& Qab, mpz_class& Tab)
+{
+	// Recursively compute P(a,b), Q(a,b) and T(a,b)
+	// m is the midpoint of and b
+	mpz_class aplusb = a + b;
+	mpz_div_ui(m.get_mpz_t(), aplusb.get_mpz_t(), 2);//equivalent pseudocode: m=floor((a+b)/2)
+	// Recursively calculate P(a, m), Q(a, m) and T(a, m)
+	bsReturn am = bs(a, m);
+	// Recursively calculate P(m, b), Q(m, b) and T(m, b)
+	bsReturn mb = bs(m, b);
+	// Now combine
+	Pab = am.P * mb.P;
+	Qab = am.Q * mb.Q;
+	Tab = (mb.Q * am.T) + (am.P * mb.T);
 }
 
 bsReturn ChudnovskyPiBS::bs_multithreaded(mpz_class a, mpz_class b, int threadCount) //clearly thread safe because nothing from outside the function is written to.
@@ -98,24 +106,7 @@ bsReturn ChudnovskyPiBS::bs_multithreaded(mpz_class a, mpz_class b, int threadCo
 	mpz_class m;
 	if (b - a == 1)
 	{
-		//Directly compute P(a,a+1), Q(a,a+1) and T(a,a+1)
-		if (a == 0)
-			Pab = Qab = 1;
-		else
-		{
-			Pab = (6 * a - 5) * (2 * a - 1) * (6 * a - 1);
-			Qab = a * a * a * intBigC3_OVER_24;
-		}
-
-		Tab = Pab * (13591409 + 545140134 * a); // a(a) * p(a)
-		//Pab.get_str();
-		//Tab.get_str();
-		//a.get_str();
-		//Qab.get_str();
-		mpz_class toCheck;
-		mpz_and(toCheck.get_mpz_t(), a.get_mpz_t(), one);
-		if (toCheck == 1) //note to self: works as expected
-			Tab = -Tab;
+		directlyCompute__P_Q_T__from_A_to_AplusOne(a, Pab, Qab, Tab);
 	}
 	else
 	{
@@ -168,7 +159,6 @@ bsReturn ChudnovskyPiBS::bs_multithreaded(mpz_class a, mpz_class b, int threadCo
 	return result;
 }
 
-
 bsReturn ChudnovskyPiBS::bs_multithreaded_barrier(mpz_class a, mpz_class b, int threadCount, int depth) //clearly thread safe because nothing from outside the function is written to.
 {
 	if (threadCount == 0)
@@ -184,24 +174,7 @@ bsReturn ChudnovskyPiBS::bs_multithreaded_barrier(mpz_class a, mpz_class b, int 
 	mpz_class m;
 	if (b - a == 1)
 	{
-		//Directly compute P(a,a+1), Q(a,a+1) and T(a,a+1)
-		if (a == 0)
-			Pab = Qab = 1;
-		else
-		{
-			Pab = (6 * a - 5) * (2 * a - 1) * (6 * a - 1);
-			Qab = a * a * a * intBigC3_OVER_24;
-		}
-
-		Tab = Pab * (13591409 + 545140134 * a); // a(a) * p(a)
-		//Pab.get_str();
-		//Tab.get_str();
-		//a.get_str();
-		//Qab.get_str();
-		mpz_class toCheck;
-		mpz_and(toCheck.get_mpz_t(), a.get_mpz_t(), one);
-		if (toCheck == 1) //note to self: works as expected
-			Tab = -Tab;
+		directlyCompute__P_Q_T__from_A_to_AplusOne(a, Pab, Qab, Tab);
 	}
 	else
 	{
@@ -275,12 +248,6 @@ int ChudnovskyPiBS::getTotalNumThreadsFromUsefulNumThreads(int usefulThreadCount
 	return totalThreadCountNeeded;
 }
 
-//int ChudnovskyPiBS::
-//{
-//
-//}
-
-
 mpz_class ChudnovskyPiBS::calculatePi()
 {
 	SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
@@ -300,11 +267,6 @@ mpz_class ChudnovskyPiBS::calculatePi()
 
 
 /* DEPRECATED/OLD MULTITHREADING SOLUTION
-* //The following definition made 16 main-worker-threads instead of 8 when asked to make 8.
-
-
-
-
 mpz_class ChudnovskyPiBS::calculatePi()
 {
 	SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
