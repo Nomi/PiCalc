@@ -44,7 +44,8 @@ private:
 	/// <param name="b"></param>
 	/// <returns></returns>
 	bsReturn bs(mpz_class a, mpz_class b);
-	bsReturn bs_multithreaded(mpz_class a, mpz_class b, int threadCount, int depth);
+	bsReturn bs_multithreaded(mpz_class a, mpz_class b, int threadCount);
+	bsReturn bs_multithreaded_barrier(mpz_class a, mpz_class b, int threadCount, int depth); //uses a barrier to wait for all main worker threads to spawn.
 
 public:
 	/// <summary>
