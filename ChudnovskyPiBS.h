@@ -2,8 +2,10 @@
 #include <iostream>
 #include <math.h>
 #include <stdexcept>
+#include <barrier>
 #include "GMP/gmpxx.h"
 
+//Helper structs:
 struct bsReturn
 {
 	mpz_class P;
@@ -11,6 +13,7 @@ struct bsReturn
 	mpz_class T;
 };
 
+//The class itself:
 class ChudnovskyPiBS //Calculates Pi using Chudnovsky algorithm with Binary Splitting
 {
 private:
@@ -42,7 +45,6 @@ private:
 	/// <returns></returns>
 	bsReturn bs(mpz_class a, mpz_class b);
 	bsReturn bs_multithreaded(mpz_class a, mpz_class b, int threadCount, int depth);
-	int getTotalNumThreadsFromUsefulNumThreads(int usefulThreadCountWanted);
 
 public:
 	/// <summary>
@@ -50,6 +52,7 @@ public:
 	/// </summary>
 	/// <param name="_digits">Used to show number of digits.</param>
 	ChudnovskyPiBS(unsigned long _digits);
+	static int getTotalNumThreadsFromUsefulNumThreads(int usefulThreadCountWanted);
 
 	mpz_class calculatePi();
 
