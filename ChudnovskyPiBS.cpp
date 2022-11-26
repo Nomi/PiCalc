@@ -254,7 +254,7 @@ mpz_class ChudnovskyPiBS::calculatePi()
 
 	//std::cout << NUM_THREADS_IN_CPU << std::endl;
 	//std::cout << TOTAL_THREAD_COUNT << std::endl;
-	bsReturn BSResult = bs_multithreaded_barrier(0, N, TOTAL_THREAD_COUNT, 0); //bs_multithreaded(0, N, TOTAL_THREAD_COUNT); //bs_multithreaded_barrier(0, N, TOTAL_THREAD_COUNT, 0); //bs(0, N); //apparently Q and T gotten are wrong.
+	bsReturn BSResult = bs_multithreaded(0, N, TOTAL_THREAD_COUNT); //bs_multithreaded(0, N, TOTAL_THREAD_COUNT); //bs_multithreaded_barrier(0, N, TOTAL_THREAD_COUNT, 0); //bs(0, N); //apparently Q and T gotten are wrong.
 	//BSResult.Q.get_str();
 	//BSResult.T.get_str();
 	//return mpz_fdiv_q((Q * 426880 * sqrtC) / T
