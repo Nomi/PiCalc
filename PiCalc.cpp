@@ -11,7 +11,9 @@ int main()
 {
     ///Configuration
     std::cout << "Configuration started." << std::endl;
-    unsigned long digits = 100000000; //apart from 3. number of decimal places.
+    unsigned long digits; //= 100000000; //apart from 3. number of decimal places.
+    std::cout << "Enter the number of digits to calculate (excluding initial 3): ";
+    std::cin >> digits;
     std::cout << std::endl;
 
     ///Computing Pi
