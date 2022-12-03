@@ -4,7 +4,6 @@
 #include "ChudnovskyPiBS.h"
 #include <sstream>
 
-#include <Windows.h> //this should be the last import somehow?
 
 //Global variables for configuration:
 const int NUM_THREADS_IN_CPU = std::thread::hardware_concurrency();
@@ -123,7 +122,6 @@ bsReturn ChudnovskyPiBS::bs_multithreaded(mpz_class a, mpz_class b, int threadCo
 		}
 		else
 		{
-			SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
 			am = bs(a, m);
 		}
 		// Recursively calculate P(m, b), Q(m, b) and T(m, b)
@@ -135,7 +133,6 @@ bsReturn ChudnovskyPiBS::bs_multithreaded(mpz_class a, mpz_class b, int threadCo
 		}
 		else
 		{
-			SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
 			mb = bs(m, b);
 		}
 
@@ -164,7 +161,6 @@ bsReturn ChudnovskyPiBS::bs_multithreaded_barrier(mpz_class a, mpz_class b, int 
 	if (threadCount == 0)
 	{
 		ALL_THREADS_SPAWNED.arrive_and_wait();
-		SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
 	}
 	depth++;
 	bsReturn result;
@@ -250,8 +246,6 @@ int ChudnovskyPiBS::getTotalNumThreadsFromUsefulNumThreads(int usefulThreadCount
 
 mpz_class ChudnovskyPiBS::calculatePi()
 {
-	SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
-
 	//std::cout << NUM_THREADS_IN_CPU << std::endl;
 	//std::cout << TOTAL_THREAD_COUNT << std::endl;
 	bsReturn BSResult = bs_multithreaded(0, N, TOTAL_THREAD_COUNT); //bs_multithreaded(0, N, TOTAL_THREAD_COUNT); //bs_multithreaded_barrier(0, N, TOTAL_THREAD_COUNT, 0); //bs(0, N); //apparently Q and T gotten are wrong.
@@ -261,7 +255,6 @@ mpz_class ChudnovskyPiBS::calculatePi()
 	mpz_class result = (BSResult.Q * 426880 * sqrtC);
 	mpz_fdiv_q(result.get_mpz_t(), result.get_mpz_t(), BSResult.T.get_mpz_t());
 
-	SetPriorityClass(GetCurrentProcess(), NORMAL_PRIORITY_CLASS);
 	return result;
 }
 
