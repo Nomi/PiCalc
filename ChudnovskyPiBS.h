@@ -3,7 +3,8 @@
 #include <math.h>
 #include <stdexcept>
 #include <barrier>
-#include "GMP/gmpxx.h"
+#include "MPIR/gmp.h"
+#include "MPIR/gmpxx.h"
 
 //Helper structs:
 struct bsReturn
@@ -19,16 +20,19 @@ class ChudnovskyPiBS //Calculates Pi using Chudnovsky algorithm with Binary Spli
 private:
 	const long double C = 640320;
 	const long double C3_OVER_24 = powl(C,3)/24;
-	mpz_class intBigC3_OVER_24 = 0;
+	mpz_class intBigC3_OVER_24 = mpz_class(0);
 	const long double DIGITS_PER_TERM = log10l(C3_OVER_24 / 6 / 2 / 6);
 
 	unsigned long N;
 	unsigned long digits;
-	mpz_class one_squared;
-	mpz_class sqrtC;
+	mpz_class one_squared = mpz_class(-1);
+	mpf_class SHIFTER = mpf_class(-1);
 
-	mpz_class oneClass = 1;
-	mpz_ptr one = oneClass.get_mpz_t();
+	mpz_class sqrtC = mpz_class(-1);
+	mpf_class sqrtCF = mpf_class(-1);
+
+	mpz_class digitOneClass = mpz_class(1);
+	mpz_ptr one = digitOneClass.get_mpz_t();
 
 	/// <summary>
 	/// Computes the terms for binary splitting the Chudnovsky infinite series.
@@ -48,7 +52,7 @@ private:
 	void directlyCompute__P_Q_T__from_A_to_AplusOne(mpz_class& a, mpz_class& Pab, mpz_class& Qab, mpz_class& Tab);
 	bsReturn bs_multithreaded(mpz_class a, mpz_class b, int threadCount);
 	bsReturn bs_multithreaded_barrier(mpz_class a, mpz_class b, int threadCount, int depth); //uses a barrier to wait for all main worker threads to spawn.
-
+	void getSqrtC(unsigned long digits);
 public:
 	/// <summary>
 	/// Constructor for ChudnovskyPiBS Class.

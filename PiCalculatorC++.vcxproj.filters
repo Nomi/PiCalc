@@ -26,10 +26,16 @@
     <ClInclude Include="ChudnovskyPiBS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GMP\gmp.h">
+    <ClInclude Include="MPIR\gmp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GMP\gmpxx.h">
+    <ClInclude Include="MPIR\mpir.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MPIR\mpirxx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MPIR\gmpxx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
