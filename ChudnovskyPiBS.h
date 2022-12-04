@@ -3,7 +3,7 @@
 #include <math.h>
 #include <stdexcept>
 #include <barrier>
-#include "GMP/gmpxx.h"
+#include <gmpxx.h>
 
 //Helper structs:
 struct bsReturn

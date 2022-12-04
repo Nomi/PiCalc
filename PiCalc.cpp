@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 #include <chrono>
-#include "GMP/gmpxx.h"
+#include <gmpxx.h>
 #include "ChudnovskyPiBS.h"
 
 #define OUTPUT_TXT_FILEPATH "./calculated_pi.txt"
