@@ -7,8 +7,8 @@
 #include <string>
 #include "Windows.h"
 #define OUTPUT_TXT_FILEPATH "./calculated_pi.txt"
-#define WMPIR_COMPATIBILITY_PROGRAM_PATH L"./pcwmpir-CompatabilityProgram.exe"
-#define HUNDRED_MILLION 100000000
+#define WMPIR_COMPATIBILITY_PROGRAM_PATH L"./pcwmpir-CompatabilityProgram.procxe"
+#define HUNDRED_MILLION 10000
 int main()
 {
     ///Configuration
@@ -56,6 +56,8 @@ int main()
         CloseHandle(pi.hThread);
         
         //return from this prog
+        std::cout << "Want to exit?" << std::endl;
+        system("PAUSE");
         return 96;
     }
     ///Computing Pi
