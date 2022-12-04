@@ -21,14 +21,7 @@ ChudnovskyPiBS::ChudnovskyPiBS(unsigned long _digits)
 		abort(); //precision can't be handled by long double.
 	N = (unsigned long)(digits / DIGITS_PER_TERM + 1);
 
-	mpz_ui_pow_ui(one_squared.get_mpz_t(), 10, 2 * digits);
-
-	//one_squared.get_str();
-
-	mpz_class thousandandfive__times__one_squared = 10005 * one_squared;
-	mpz_sqrt(sqrtC.get_mpz_t(), thousandandfive__times__one_squared.get_mpz_t());
-
-	//sqrtC.get_str();
+	futSqrtC = std::async(std::launch::async, &ChudnovskyPiBS::getSqrtC, this, digits);
 
 	mpz_ui_pow_ui(intBigC3_OVER_24.get_mpz_t(), C, 3);
 	mpz_class twentyfour = 24;
@@ -184,7 +177,7 @@ bsReturn ChudnovskyPiBS::bs_multithreaded_barrier(mpz_class a, mpz_class b, int 
 		if (threadCount > 0)
 		{
 			int subThreadCountLeft = (--threadCount - 1) / 2; //(int)powl(2, depth); //About the following comment, I might have been wrong. Can't blame me, I'm sleep deprived. //you divide threadCount by powl(2,depth) because 2^depth tells you the number of parallel threads of the binary recursion (or the nodes of a binary tree) at this depth and so you can calculate how to divide number of threads to spawn.
-			futAm = std::async(std::launch::async, &ChudnovskyPiBS::bs_multithreaded_barrier, this, a, m, subThreadCountLeft, depth); 
+			futAm = std::async(std::launch::async, &ChudnovskyPiBS::bs_multithreaded_barrier, this, a, m, subThreadCountLeft, depth);
 		}
 		else
 		{
@@ -252,12 +245,26 @@ mpz_class ChudnovskyPiBS::calculatePi()
 	//BSResult.Q.get_str();
 	//BSResult.T.get_str();
 	//return mpz_fdiv_q((Q * 426880 * sqrtC) / T
-	mpz_class result = (BSResult.Q * 426880 * sqrtC);
+	mpz_class result = (BSResult.Q * 426880 * futSqrtC.get());
 	mpz_fdiv_q(result.get_mpz_t(), result.get_mpz_t(), BSResult.T.get_mpz_t());
 
 	return result;
 }
 
+mpz_class ChudnovskyPiBS::getSqrtC(unsigned long digits)
+{
+	mpz_class one_squared;
+	mpz_ui_pow_ui(one_squared.get_mpz_t(), 10, 2 * digits);
+
+	//one_squared.get_str();
+	mpz_class thousandandfive__times__one_squared = 10005 * one_squared;
+	mpz_class sqrtC;
+	mpz_sqrt(sqrtC.get_mpz_t(), thousandandfive__times__one_squared.get_mpz_t());
+
+	//sqrtC.get_str();
+
+	return sqrtC;
+}
 
 /* DEPRECATED/OLD MULTITHREADING SOLUTION
 mpz_class ChudnovskyPiBS::calculatePi()
@@ -271,7 +278,7 @@ mpz_class ChudnovskyPiBS::calculatePi()
 	//}
 	int numberOfThreadsInCPU = std::thread::hardware_concurrency();
 	int totalThreadCount = getTotalNumThreadsFromUsefulNumThreads(numberOfThreadsInCPU);
-	bsReturn BSResult = bs_multithreaded(0, N, totalThreadCount, 0);//bs(0, N); 
+	bsReturn BSResult = bs_multithreaded(0, N, totalThreadCount, 0);//bs(0, N);
 	//bsReturn BSResult = bs(0, N); //apparently Q and T gotten are wrong.
 	//BSResult.Q.get_str();
 	//BSResult.T.get_str();
