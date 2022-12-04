@@ -38,28 +38,24 @@ int main()
     else
         duration = duration_MS.count();
     //std::cout << "Computed " << digits <<" (10^"<<log10l(digits) << ") digits (excluding the first digit ('3')) in " << duration << suffix << "." << std::endl << std::endl;
-        std::cout << "Computed " << digits <<" (10^"<<log10l(digits) << ") digits (excluding the first digit ('3')) in " << execution_time << "seconds" << "." << std::endl << std::endl;
-
-    ///Running simple tests
-    std::string correctLastDigits = "61168313937514970581120187751592";
-    std::string calculatedPiStr = calculatedPi.get_str();
-    size_t offset = calculatedPiStr.length() - correctLastDigits.length();
-    bool doesWork = ~(calculatedPiStr.compare(offset, correctLastDigits.length(), correctLastDigits));
-    std::string testStatus = "FAILED";
-    if (doesWork)
-    {
-        testStatus = "passed (remember, tests are not exhaustive)";
-    }
-    std::cout << "Initial tests have " + testStatus + "." << std::endl << std::endl;
-    
+    std::cout << "Computed " << digits <<" (10^"<<log10l(digits) << ") digits (excluding the first digit ('3')) in " << execution_time << "seconds" << "." << std::endl << std::endl;
 
     ///Writing to file:
+    std::string calculatedPiStr = calculatedPi.get_str();
     std::cout << "Writing computed value to output file." << std::endl;
     std::ofstream out(OUTPUT_TXT_FILEPATH);
     out << calculatedPiStr;
     out.close();
     std::cout << "Wrote computed values to :" << OUTPUT_TXT_FILEPATH << "!" << std::endl << std::endl;
 
+    ///Running simple tests
+    bool doesWork = (calculatedPiStr.length() == 1 + digits);
+    std::string testStatus = "FAILED";
+    if (doesWork)
+    {
+        testStatus = "passed (remember, tests are not exhaustive)";
+    }
+    std::cout << "Initial tests have " + testStatus + "." << std::endl << std::endl;
 
     ///Finished.
     std::cout << "Program finished. Want to exit?" << std::endl;
