@@ -62,6 +62,7 @@ int main(int argc, char* argv[])
     std::cout << "Initial tests have " + testStatus + "." << std::endl << std::endl;
 
     ///Finished.
-    std::cout << "Program finished." << std::endl;
+    std::cout << "Program finished. Want to exit?" << std::endl;
+    system("PAUSE");
     return EXIT_SUCCESS;
 }
