@@ -26,6 +26,8 @@ ChudnovskyPiBS::ChudnovskyPiBS(unsigned long _digits)
 		throw _EXCEPTION_; //precision can't be handled by long double.
 	N = (unsigned long)(digits / DIGITS_PER_TERM + 1);
 
+	futSqrtC = std::async(std::launch::async, &ChudnovskyPiBS::getSqrtC, this, digits);
+
 	mpz_ui_pow_ui(intBigC3_OVER_24.get_mpz_t(), C, 3);
 	mpz_class twentyfour = 24;
 	mpz_fdiv_q(intBigC3_OVER_24.get_mpz_t(), intBigC3_OVER_24.get_mpz_t(), twentyfour.get_mpz_t());
@@ -224,7 +226,7 @@ bsReturn ChudnovskyPiBS::bs_multithreaded_barrier(mpz_class a, mpz_class b, int 
 		if (threadCount > 0)
 		{
 			int subThreadCountLeft = (--threadCount - 1) / 2; //(int)powl(2, depth); //About the following comment, I might have been wrong. Can't blame me, I'm sleep deprived. //you divide threadCount by powl(2,depth) because 2^depth tells you the number of parallel threads of the binary recursion (or the nodes of a binary tree) at this depth and so you can calculate how to divide number of threads to spawn.
-			futAm = std::async(std::launch::async, &ChudnovskyPiBS::bs_multithreaded_barrier, this, a, m, subThreadCountLeft, depth); 
+			futAm = std::async(std::launch::async, &ChudnovskyPiBS::bs_multithreaded_barrier, this, a, m, subThreadCountLeft, depth);
 		}
 		else
 		{
@@ -269,34 +271,6 @@ bsReturn ChudnovskyPiBS::bs_multithreaded_barrier(mpz_class a, mpz_class b, int 
 	return result;
 }
 
-void ChudnovskyPiBS::getSqrtC(unsigned long digits)
-{
-	if (digits <= HUNDRED_MILLION)
-	{
-		mpz_ui_pow_ui(one_squared.get_mpz_t(), 10, 2 * digits);
-	}
-	else
-	{
-		mpz_class ten = 10;
-		mpz_pow_ui(one_squared.get_mpz_t(), ten.get_mpz_t(), digits / 10); //10^(digits/10)
-		/*mpz_pow_ui(one_squared.get_mpz_t(), one_squared.get_mpz_t(), 10);*/
-		ten = one_squared;
-		for (int i = 1; i < 10; i++) //this is basically doing (10^digits/10)^10 (by power rule, it becomes 10^digits)
-			one_squared *= ten;
-		//std::cout << one_squared.get_str() << std::endl;
-		one_squared *= one_squared; //this makes it 10^(digits+digits) = 10^(2*digits) which is what we wanted.
-		//mpz_class lol;
-		//mpz_ui_pow_ui(lol.get_mpz_t(), 10, 2*_digits);
-		//if (lol != one_squared)
-		//{
-		//	std::cout << one_squared.get_str() << std::endl;
-		//	std::cout <<  lol.get_str() << std::endl;
-		//}
-	}
-	mpz_class thousandandfive__times__one_squared = 10005 * one_squared;
-	mpz_sqrt(sqrtC.get_mpz_t(), thousandandfive__times__one_squared.get_mpz_t());
-}
-
 int ChudnovskyPiBS::getTotalNumThreadsFromUsefulNumThreads(int usefulThreadCountWanted)
 {
 	if (usefulThreadCountWanted == 2)
@@ -321,15 +295,28 @@ mpz_class ChudnovskyPiBS::calculatePi()
 	bsReturn BSResult = bs_multithreaded(0, N, TOTAL_THREAD_COUNT); //bs_multithreaded(0, N, TOTAL_THREAD_COUNT); //bs_multithreaded_barrier(0, N, TOTAL_THREAD_COUNT, 0); //bs(0, N); //apparently Q and T gotten are wrong.
 	//BSResult.Q.get_str();
 	//BSResult.T.get_str();
-
-	/*getSqrtC(digits);*/
-	mpz_class result = (BSResult.Q * 426880 * sqrtC);
+	//return mpz_fdiv_q((Q * 426880 * sqrtC) / T
+	mpz_class result = (BSResult.Q * 426880 * futSqrtC.get());
 	mpz_fdiv_q(result.get_mpz_t(), result.get_mpz_t(), BSResult.T.get_mpz_t());
 
 	SetPriorityClass(GetCurrentProcess(), NORMAL_PRIORITY_CLASS);
 	return result;
 }
 
+mpz_class ChudnovskyPiBS::getSqrtC(unsigned long digits)
+{
+	mpz_class one_squared;
+	mpz_ui_pow_ui(one_squared.get_mpz_t(), 10, 2 * digits);
+
+	//one_squared.get_str();
+	mpz_class thousandandfive__times__one_squared = 10005 * one_squared;
+	mpz_class sqrtC;
+	mpz_sqrt(sqrtC.get_mpz_t(), thousandandfive__times__one_squared.get_mpz_t());
+
+	//sqrtC.get_str();
+
+	return sqrtC;
+}
 
 
 
@@ -345,7 +332,7 @@ mpz_class ChudnovskyPiBS::calculatePi()
 	//}
 	int numberOfThreadsInCPU = std::thread::hardware_concurrency();
 	int totalThreadCount = getTotalNumThreadsFromUsefulNumThreads(numberOfThreadsInCPU);
-	bsReturn BSResult = bs_multithreaded(0, N, totalThreadCount, 0);//bs(0, N); 
+	bsReturn BSResult = bs_multithreaded(0, N, totalThreadCount, 0);//bs(0, N);
 	//bsReturn BSResult = bs(0, N); //apparently Q and T gotten are wrong.
 	//BSResult.Q.get_str();
 	//BSResult.T.get_str();
