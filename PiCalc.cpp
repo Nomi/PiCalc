@@ -7,14 +7,17 @@
 
 #define OUTPUT_TXT_FILEPATH "./calculated_pi.txt"
 
-int main()
+int main(int argc, char* argv[])
 {
 
+    if (argc != 2)
+    {
+        std::cout << "FATAL ERROR. INVALID ARGUMENTS COUNT FOR PiCalcMPIR COMPATIBILITY Program." << std::endl;
+    }
     ///Configuration
-    std::cout << "Configuration started." << std::endl;
-    unsigned long digits; //= 100000000; //apart from 3. number of decimal places.
-    std::cout << "Enter the number of digits to calculate (excluding initial 3): ";
-    std::cin >> digits;
+    std::string digStr = argv[1];
+    mpz_class t = mpz_class(digStr, 10);
+    unsigned long digits = t.get_ui();
     std::cout <<"Recieved "<<digits<< "." << std::endl;
 
     ///Computing Pi
@@ -59,7 +62,6 @@ int main()
     std::cout << "Initial tests have " + testStatus + "." << std::endl << std::endl;
 
     ///Finished.
-    std::cout << "Program finished. Want to exit?" << std::endl;
-    system("PAUSE");
+    std::cout << "Program finished." << std::endl;
     return EXIT_SUCCESS;
 }
