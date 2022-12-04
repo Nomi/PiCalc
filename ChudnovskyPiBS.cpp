@@ -18,7 +18,7 @@ ChudnovskyPiBS::ChudnovskyPiBS(unsigned long _digits)
 {
 	digits = _digits;
 	if (_digits != (unsigned long)((long double)_digits))
-		throw _EXCEPTION_; //precision can't be handled by long double.
+		abort(); //precision can't be handled by long double.
 	N = (unsigned long)(digits / DIGITS_PER_TERM + 1);
 
 	mpz_ui_pow_ui(one_squared.get_mpz_t(), 10, 2 * digits);
@@ -236,7 +236,7 @@ int ChudnovskyPiBS::getTotalNumThreadsFromUsefulNumThreads(int usefulThreadCount
 	else if (usefulThreadCountWanted <= 1 || floor(log2(usefulThreadCountWanted)) != log2(usefulThreadCountWanted))
 	{
 		std::cout << "Invalid thread count. Needs to be some power of 2 and more than 1." << std::endl;
-		throw _EXCEPTION_;
+		abort();
 	}
 	//usefulThreadCount is basically the same as the maximum leaves of a binary tree at some level, meanwhile total includes useless (those blocking/waititng for the computation threads).
 	int depthOfBinaryTree = log2(usefulThreadCountWanted);//num leaves = 2^depth
