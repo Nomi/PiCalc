@@ -7,7 +7,7 @@
 #include <string>
 #include "Windows.h"
 #define OUTPUT_TXT_FILEPATH "./calculated_pi.txt"
-#define WMPIR_COMPATIBILITY_PROGRAM_PATH L"./pcwmpir-CompatabilityProgram.procxe"
+#define WMPIR_COMPATIBILITY_PROGRAM_PATH L"./pcwmpir-compat.procxe"
 #define HUNDRED_MILLION 100000000
 int main()
 {
