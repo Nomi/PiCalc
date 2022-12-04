@@ -31,48 +31,48 @@ ChudnovskyPiBS::ChudnovskyPiBS(unsigned long _digits)
 	mpz_ui_pow_ui(intBigC3_OVER_24.get_mpz_t(), C, 3);
 	mpz_class twentyfour = 24;
 	mpz_fdiv_q(intBigC3_OVER_24.get_mpz_t(), intBigC3_OVER_24.get_mpz_t(), twentyfour.get_mpz_t());
-	//intBigC3_OVER_24.get_str();
-	//if (digits <= HUNDRED_MILLION)
-	//{
-		mpz_ui_pow_ui(one_squared.get_mpz_t(), 10, 2*_digits);
-		mpz_class thousandandfive__times__one_squared = 10005 * one_squared;
-		mpz_sqrt(sqrtC.get_mpz_t(), thousandandfive__times__one_squared.get_mpz_t());
-		//std::cout << "Needed strlen:" << sqrtC.get_str().length() << std::endl;
-	//}
-	//else
-	//{
-	//	mp_bitcnt_t prec = digits * log2l(10); //or is it 8 * (digits + 4)??
-	//	SHIFTER.set_prec(prec);
-	//	sqrtCF.set_prec(prec);
+	////intBigC3_OVER_24.get_str();
+	////if (digits <= HUNDRED_MILLION)
+	////{
+	//	mpz_ui_pow_ui(one_squared.get_mpz_t(), 10, 2*_digits);
+	//	mpz_class thousandandfive__times__one_squared = 10005 * one_squared;
+	//	mpz_sqrt(sqrtC.get_mpz_t(), thousandandfive__times__one_squared.get_mpz_t());
+	//	//std::cout << "Needed strlen:" << sqrtC.get_str().length() << std::endl;
+	////}
+	////else
+	////{
+	////	mp_bitcnt_t prec = digits * log2l(10); //or is it 8 * (digits + 4)??
+	////	SHIFTER.set_prec(prec);
+	////	sqrtCF.set_prec(prec);
 
-	//	mpf_class ten = mpf_class(10);
-	//	mpf_pow_ui(SHIFTER.get_mpf_t(), ten.get_mpf_t(), digits);
-	//	//std::cout << "Prec:" << SHIFTER.get_prec() << std::endl;
-	//	mpf_sqrt_ui(sqrtCF.get_mpf_t(),10005);
-	//	//sqrtCF += 0.1 / SHIFTER;
-	//	sqrtCF *= SHIFTER;
-	//	mpf_trunc(sqrtCF.get_mpf_t(), sqrtCF.get_mpf_t());
-	//	mp_exp_t exp = 0;
-	//	std::string tempMiddleWare = sqrtCF.get_str(exp, 10, _digits + 4);
-	//	//std::cout << "Gotten strlen:" << tempMiddleWare.length() << std::endl;
-	//	//std::cout << "Decimal pt location:" << exp << std::endl;
-	//	sqrtC = mpz_class(tempMiddleWare);
-	//	//sqrtC.get_str();
-	//	/*
-	//	////ten = SHIFTER;
-	//	////for (int i = 1; i < 10; i++) //this is basically doing (10^digits/10)^10 (by power rule, it becomes 10^digits)
-	//	////	SHIFTER *= ten;
-	//	////std::cout << one_squared.get_str() << std::endl;
-	//	////one_squared *= one_squared; //this makes it 10^(digits+digits) = 10^(2*digits) which is what we wanted.
-	//	////mpz_class lol;
-	//	////mpz_ui_pow_ui(lol.get_mpz_t(), 10, 2*_digits);
-	//	////if (lol != one_squared)
-	//	////{
-	//	////	std::cout << one_squared.get_str() << std::endl;
-	//	////	std::cout <<  lol.get_str() << std::endl;
-	//	////}
-	//	*/
-	//}
+	////	mpf_class ten = mpf_class(10);
+	////	mpf_pow_ui(SHIFTER.get_mpf_t(), ten.get_mpf_t(), digits);
+	////	//std::cout << "Prec:" << SHIFTER.get_prec() << std::endl;
+	////	mpf_sqrt_ui(sqrtCF.get_mpf_t(),10005);
+	////	//sqrtCF += 0.1 / SHIFTER;
+	////	sqrtCF *= SHIFTER;
+	////	mpf_trunc(sqrtCF.get_mpf_t(), sqrtCF.get_mpf_t());
+	////	mp_exp_t exp = 0;
+	////	std::string tempMiddleWare = sqrtCF.get_str(exp, 10, _digits + 4);
+	////	//std::cout << "Gotten strlen:" << tempMiddleWare.length() << std::endl;
+	////	//std::cout << "Decimal pt location:" << exp << std::endl;
+	////	sqrtC = mpz_class(tempMiddleWare);
+	////	//sqrtC.get_str();
+	////	/*
+	////	////ten = SHIFTER;
+	////	////for (int i = 1; i < 10; i++) //this is basically doing (10^digits/10)^10 (by power rule, it becomes 10^digits)
+	////	////	SHIFTER *= ten;
+	////	////std::cout << one_squared.get_str() << std::endl;
+	////	////one_squared *= one_squared; //this makes it 10^(digits+digits) = 10^(2*digits) which is what we wanted.
+	////	////mpz_class lol;
+	////	////mpz_ui_pow_ui(lol.get_mpz_t(), 10, 2*_digits);
+	////	////if (lol != one_squared)
+	////	////{
+	////	////	std::cout << one_squared.get_str() << std::endl;
+	////	////	std::cout <<  lol.get_str() << std::endl;
+	////	////}
+	////	*/
+	////}
 }
 
 bsReturn ChudnovskyPiBS::bs(mpz_class a, mpz_class b) //clearly thread safe because nothing from outside the function is written to.
