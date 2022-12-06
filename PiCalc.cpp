@@ -8,7 +8,7 @@
 #include "Windows.h"
 #define OUTPUT_TXT_FILEPATH "./calculated_pi.txt"
 #define WMPIR_COMPATIBILITY_PROGRAM_PATH L"./pcwmpir-compat.procxe"
-#define HUNDRED_MILLION 100000000
+#define HUNDRED_MILLION powl(10,8)
 int main()
 {
     ///Configuration
@@ -19,6 +19,7 @@ int main()
     std::cout << std::endl;
     if (digits > HUNDRED_MILLION)
     {
+        std::cout << "Entering Windows \"extremely large digit count\" compatibility mode." << std::endl;
         STARTUPINFO si;
         PROCESS_INFORMATION pi;
 
@@ -32,8 +33,9 @@ int main()
         std::wstring wcmnd = wpath + L" " + wdigits;
         LPWSTR cmnd = LPWSTR(wcmnd.c_str());
         // Start the child process. 
-        if (!CreateProcess(NULL,   // No module name (use command line)
-            cmnd,        // Command line
+        if (!CreateProcess(
+            NULL,           // No module name (use command line)
+            cmnd,           // Command line
             NULL,           // Process handle not inheritable
             NULL,           // Thread handle not inheritable
             FALSE,          // Set handle inheritance to FALSE
@@ -41,7 +43,7 @@ int main()
             NULL,           // Use parent's environment block
             NULL,           // Use parent's starting directory 
             &si,            // Pointer to STARTUPINFO structure
-            &pi)           // Pointer to PROCESS_INFORMATION structure
+            &pi)            // Pointer to PROCESS_INFORMATION structure
             )
         {
             printf("CreateProcess failed for wmpir Compatility Program (%d).\n", GetLastError());
