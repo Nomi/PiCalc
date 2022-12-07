@@ -45,8 +45,8 @@ int main(int argc, char* argv[])
     std::cout << "Computed " << digits <<" (10^"<<log10l(digits) << ") digits (excluding the first digit ('3')) in " << execution_time << "seconds" << "." << std::endl << std::endl;
 
     ///Writing to file:
-    std::string calculatedPiStr = calculatedPi.get_str();
     std::cout << "Writing computed value to output file." << std::endl;
+    std::string calculatedPiStr = calculatedPi.get_str();
     std::ofstream out(OUTPUT_TXT_FILEPATH);
     out << calculatedPiStr;
     out.close();
@@ -62,7 +62,6 @@ int main(int argc, char* argv[])
     std::cout << "Initial tests have " + testStatus + "." << std::endl << std::endl;
 
     ///Finished.
-    std::cout << "Program finished. Want to exit?" << std::endl;
-    system("PAUSE");
+    std::cout << "Program finished." << std::endl;
     return EXIT_SUCCESS;
 }
