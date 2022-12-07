@@ -146,7 +146,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(ProjectDir)MPIR\Linker Files\mpir.lib;$(ProjectDir)GMP\Linker Files\libgmp.dll.a;$(ProjectDir)GMP\Linker Files\libgmpxx.dll.a;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)GMP\Linker Files\libgmp.dll.a;$(ProjectDir)GMP\Linker Files\libgmpxx.dll.a;$(ProjectDir)MPIR\Linker Files\mpir.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)GMP\DLLs\*.dll" "$(TargetDir)"
@@ -167,8 +167,6 @@ copy /Y "$(ProjectDir)MPIR\DLLs\*.dll" "$(TargetDir)"</Command>
     <ClInclude Include="GMP\gmpxx.h" />
     <ClInclude Include="MPIR\mpir.h" />
     <ClInclude Include="MPIR\mpirxx.h" />
-    <ClInclude Include="MPIR\MPIR_gmp.h" />
-    <ClInclude Include="MPIR\MPIR_gmpxx.h" />
     <ClInclude Include="MPIR_ChudnovskyPiBS.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

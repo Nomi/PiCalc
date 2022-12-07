@@ -263,7 +263,7 @@ mpz_class MPIR_ChudnovskyPiBS::calculatePi()
 /// </summary>
 /// <param name="_digits">Used to show number of digits.</param>
 
-inline int MPIR_ChudnovskyPiBS::compatbilityMainFunctionAlternative(unsigned long digits, std::string outputTextFilePath)
+int MPIR_ChudnovskyPiBS::compatbilityMainFunctionAlternative(unsigned long digits, std::string outputTextFilePath)
 {
 	//Configuration
 	std::cout << "Recieved " << digits << "." << std::endl;

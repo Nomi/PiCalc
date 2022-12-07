@@ -6,7 +6,7 @@
 #include <thread>
 #include <future>
 #include <fstream>
-#include "MPIR/MPIR_gmpxx.h"
+#include "MPIR/mpirxx.h"
 
 //Helper structs:
 struct MPIR_VERSION_bsReturn
