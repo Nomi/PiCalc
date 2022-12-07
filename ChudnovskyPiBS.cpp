@@ -116,7 +116,7 @@ bsReturn ChudnovskyPiBS::bs_multithreaded(mpz_class a, mpz_class b, int threadCo
 		}
 		else
 		{
-			//SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
+			SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
 			am = bs(a, m);
 		}
 		// Recursively calculate P(m, b), Q(m, b) and T(m, b)
@@ -128,7 +128,7 @@ bsReturn ChudnovskyPiBS::bs_multithreaded(mpz_class a, mpz_class b, int threadCo
 		}
 		else
 		{
-			//SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
+			SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
 			mb = bs(m, b);
 		}
 
@@ -157,7 +157,7 @@ bsReturn ChudnovskyPiBS::bs_multithreaded_barrier(mpz_class a, mpz_class b, int 
 	if (threadCount == 0)
 	{
 		ALL_THREADS_SPAWNED.arrive_and_wait();
-		//SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
+		SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
 	}
 	depth++;
 	bsReturn result;
@@ -243,7 +243,7 @@ int ChudnovskyPiBS::getTotalNumThreadsFromUsefulNumThreads(int usefulThreadCount
 
 mpz_class ChudnovskyPiBS::calculatePi()
 {
-	//SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
+	SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
 
 	//std::cout << NUM_THREADS_IN_CPU << std::endl;
 	//std::cout << TOTAL_THREAD_COUNT << std::endl;
@@ -254,7 +254,7 @@ mpz_class ChudnovskyPiBS::calculatePi()
 	mpz_class result = (BSResult.Q * 426880 * futSqrtC.get());
 	mpz_fdiv_q(result.get_mpz_t(), result.get_mpz_t(), BSResult.T.get_mpz_t());
 
-	//SetPriorityClass(GetCurrentProcess(), NORMAL_PRIORITY_CLASS);
+	SetPriorityClass(GetCurrentProcess(), NORMAL_PRIORITY_CLASS);
 	return result;
 }
 
