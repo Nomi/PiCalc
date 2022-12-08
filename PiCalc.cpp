@@ -42,14 +42,15 @@ int main()
     std::cout << "Computed " << digits <<" (10^"<<log10l(digits) << ") digits (excluding the first digit ('3')) in " << execution_time << "seconds" << "." << std::endl << std::endl;
 
     ///Writing to file:
-    std::string calculatedPiStr = calculatedPi.get_str();
     std::cout << "Writing computed value to output file." << std::endl;
+    std::string calculatedPiStr = calculatedPi.get_str();
     std::ofstream out(OUTPUT_TXT_FILEPATH);
     out << calculatedPiStr;
     out.close();
     std::cout << "Wrote computed values to :" << OUTPUT_TXT_FILEPATH << "!" << std::endl << std::endl;
 
     ///Running simple tests
+    std::cout << "Running simple tests. You may press \"ctrl+c\" to cancel them at any time." << std::endl;
     bool doesWork = (calculatedPiStr.length() == 1 + digits);
     std::string testStatus = "FAILED";
     if (doesWork)
