@@ -271,13 +271,20 @@ bsReturn ChudnovskyPiBS::bs_multithreaded_barrier(mpz_class a, mpz_class b, int 
 	return result;
 }
 
-int ChudnovskyPiBS::getTotalNumThreadsFromUsefulNumThreads(int usefulThreadCountWanted)
+int ChudnovskyPiBS::getTotalNumThreadsFromUsefulNumThreads(int _usefulThreadCountWanted)
 {
+	int usefulThreadCountWanted = _usefulThreadCountWanted;
 	if (usefulThreadCountWanted == 2)
-		return 2;
-	else if (usefulThreadCountWanted <= 1 || floor(log2(usefulThreadCountWanted)) != log2(usefulThreadCountWanted))
 	{
-		std::cout << "Invalid thread count. Needs to be some power of 2 and more than 1." << std::endl;
+		return 2;
+	}
+	else if (floor(log2(usefulThreadCountWanted)) != log2(usefulThreadCountWanted))
+	{
+		usefulThreadCountWanted = pow(2, floor(log2(usefulThreadCountWanted)));
+	}
+	if (usefulThreadCountWanted <= 1)
+	{
+		std::cout << "Invalid thread count. Needs to be some power of 2 and greater than 1." << std::endl;
 		throw _EXCEPTION_;
 	}
 	//usefulThreadCount is basically the same as the maximum leaves of a binary tree at some level, meanwhile total includes useless (those blocking/waititng for the computation threads).

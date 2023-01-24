@@ -158,6 +158,7 @@
   <ItemGroup>
     <ClCompile Include="ChudnovskyPiBS.cpp" />
     <ClCompile Include="PiCalc.cpp" />
+    <ClCompile Include="SubstringKMP.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChudnovskyPiBS.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="MPIR\gmpxx.h" />
     <ClInclude Include="MPIR\mpir.h" />
     <ClInclude Include="MPIR\mpirxx.h" />
+    <ClInclude Include="SubstringKMP.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
